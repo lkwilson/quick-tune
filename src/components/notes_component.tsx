@@ -13,12 +13,13 @@ function get_name(index: number, notes: string[]) {
 
 function setup_note(audio_context: AudioContext, frequency: number, gain: number) {
   const gain_node = audio_context.createGain();
-  gain_node.gain.value = gain;
+  gain_node.gain.value = 0;
   const oscillator_node = audio_context.createOscillator();
   oscillator_node.type = 'sine';
   oscillator_node.frequency.value = frequency;
   oscillator_node.connect(gain_node).connect(audio_context.destination);
   oscillator_node.start();
+  gain_node.gain.setTargetAtTime(gain, audio_context.currentTime, 0.2);
   return {
     oscillator_node,
     gain_node,
@@ -69,7 +70,9 @@ export default function NotesComponent() {
   useEffect(() => {
     audio_nodes.current
       .filter((node) => node !== null)
-      .forEach(({ gain_node }) => (gain_node.gain.value = gain));
+      .forEach(({ gain_node }) => {
+        gain_node.gain.setTargetAtTime(gain, audio_context.currentTime, 0.2);
+      });
   }, [gain]);
 
   // Stop all on unmount
@@ -159,17 +162,35 @@ export default function NotesComponent() {
         </label>
         <div className="d-flex justify-content-evenly align-items-center my-1">
           <div className="border" onClick={() => set_gain((current_gain) => current_gain - 0.001)}>
-            {'<< .001'}
+            {'-0.001'}
           </div>
-          <div className="border" onClick={() => set_gain((current_gain) => current_gain - 0.01)}>
-            {'< .01'}
+          <div
+            className="border d-none d-sm-block"
+            onClick={() => set_gain((current_gain) => current_gain - 0.01)}
+          >
+            {'-0.01'}
+          </div>
+          <div
+            className="border d-none d-sm-block"
+            onClick={() => set_gain((current_gain) => current_gain - 0.1)}
+          >
+            {'-0.1'}
           </div>
           <div className="border">Gain: {gain.toFixed(3)}</div>
-          <div className="border" onClick={() => set_gain((current_gain) => current_gain + 0.01)}>
-            {'> .01'}
+          <div
+            className="border d-none d-sm-block"
+            onClick={() => set_gain((current_gain) => current_gain + 0.1)}
+          >
+            {'+0.1'}
+          </div>
+          <div
+            className="border d-none d-sm-block"
+            onClick={() => set_gain((current_gain) => current_gain + 0.01)}
+          >
+            {'+0.01'}
           </div>
           <div className="border" onClick={() => set_gain((current_gain) => current_gain + 0.001)}>
-            {'>> .001'}
+            {'+0.001'}
           </div>
         </div>
       </div>
