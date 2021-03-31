@@ -4,22 +4,34 @@ interface MusicAudioContextType {
   audio_context: AudioContext;
   A4: number;
   set_A4: React.Dispatch<React.SetStateAction<number>>;
-  set_enabled: React.Dispatch<React.SetStateAction<boolean>>;
+  create_audio_context: () => void;
   frequencies: number[];
+}
+
+function build_audio_context() {
+  const new_audio_context = new (window.AudioContext || window.webkitAudioContext)();
+  if (new_audio_context.state === 'suspended') {
+    //console.warn('New audio context was suspended. Resuming');
+    new_audio_context.resume();
+  }
+  if (new_audio_context.state === 'suspended') {
+    console.error('New audio context is still suspended. No audio will play.');
+    new_audio_context.resume();
+  }
+  return new_audio_context;
 }
 
 export const MusicAudioContext = createContext<MusicAudioContextType>(null);
 
 export function MusicAudioContextProvider({ children }) {
-  const [enabled, set_enabled] = useState(false);
+  const [audio_context, set_audio_context] = useState<AudioContext>(null);
 
-  const audio_context = useMemo(() => {
-    if (enabled) {
-      return new (window.AudioContext || window.webkitAudioContext)();
-    } else {
-      return null;
+  // Synchronous and idempotent
+  function create_audio_context() {
+    if (audio_context === null) {
+      set_audio_context(build_audio_context());
     }
-  }, [enabled]);
+  }
 
   const [A4, set_A4] = useState(440.0);
   const frequencies = useMemo(() => {
@@ -36,7 +48,7 @@ export function MusicAudioContextProvider({ children }) {
     <MusicAudioContext.Provider
       value={{
         audio_context,
-        set_enabled,
+        create_audio_context,
         A4,
         set_A4,
         frequencies,
