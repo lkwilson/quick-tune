@@ -171,7 +171,7 @@ export default function NotesComponent() {
             {'-0.001'}
           </div>
           <div
-            className="border m-1 p-1 d-none d-sm-block"
+            className="border m-1 p-1"
             onClick={() => set_gain((current_gain) => current_gain - 0.01)}
           >
             {'-0.01'}
@@ -182,7 +182,7 @@ export default function NotesComponent() {
           >
             {'-0.1'}
           </div>
-          <div className="border m-1 p-1">Gain: {gain.toFixed(3)}</div>
+          <div className="border text-center m-1 p-1">Gain: {gain.toFixed(3)}</div>
           <div
             className="border m-1 p-1 d-none d-sm-block"
             onClick={() => set_gain((current_gain) => current_gain + 0.1)}
@@ -190,7 +190,7 @@ export default function NotesComponent() {
             {'+0.1'}
           </div>
           <div
-            className="border m-1 p-1 d-none d-sm-block"
+            className="border m-1 p-1"
             onClick={() => set_gain((current_gain) => current_gain + 0.01)}
           >
             {'+0.01'}
