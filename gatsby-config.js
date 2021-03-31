@@ -3,4 +3,7 @@ module.exports = {
     title: "Quick Tuner",
   },
   plugins: [],
+  flags: {
+    DEV_SSR: false,
+  }
 };
