@@ -35,8 +35,8 @@ export function MusicAudioContextProvider({ children }) {
 
   const [A4, set_A4] = useState(440.0);
   const frequencies = useMemo(() => {
-    // A4 is at index 0 + 12 * 4
-    const A4_index = 0 + 12 * 4;
+    // C4 is at index 0 + 12 * 4, A4 is a major sixth (+9) above
+    const A4_index = 9 + 12 * 4;
     const frequencies = [];
     for (let i = 0; i < 12 * 9; ++i) {
       frequencies.push(A4 * Math.pow(2, (i - A4_index) / 12));

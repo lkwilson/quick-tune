@@ -2,8 +2,8 @@ import React, { useState, useContext, useRef, useEffect, useMemo, DOMElement } f
 import { MusicAudioContext } from '../contexts/audio_context';
 
 const time_constant = 0.2;
-const long_notes = ['A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab'];
-const small_notes = ['A', '#', 'B', 'C', '#', 'D', '#', 'E', 'F', '#', 'G', '#'];
+const long_notes = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'];
+const small_notes = ['C', '#', 'D', '#', 'E', 'F', '#', 'G', '#', 'A', '#', 'B'];
 
 function get_name(index: number, notes: string[]) {
   const octave = Math.floor(index / 12);
@@ -128,7 +128,10 @@ export default function NotesComponent() {
     const fixed_freq = freq.toFixed(0);
     return (
       <div key={`${long_names[index]}`} className="col-1 p-0 p-sm-1 text-center">
-        <div onClick={() => toggle(index)} className="border">
+        <div
+          onClick={() => toggle(index)}
+          className={`border ${playing[index] ? 'bg-dark text-light' : ''}`}
+        >
           <div className="fw-bold">{playing[index] ? '||' : '|>'}</div>
           <div className="fw-bold d-none d-lg-block">{long_names[index]}</div>
           <div className="fw-bold d-block d-lg-none">{small_names[index]}</div>
